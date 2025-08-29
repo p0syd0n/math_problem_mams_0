@@ -2,13 +2,22 @@ import string
 import random
 import matplotlib.pyplot as plt
 
-# full ASCII-ish pool
-symbols = list(string.ascii_lowercase)   # 26 lowercase
-symbols += list(string.ascii_uppercase)  # 26 uppercase
-symbols += list(string.digits)           # 10 digits
-symbols += list(string.punctuation)      # ~32 punctuation
-symbols += [chr(i) for i in range(128, 256)]  # extended Latin (non-ASCII)
-# ~220 unique symbols
+symbols = list(string.ascii_lowercase)
+symbols += list(string.ascii_uppercase)
+symbols += list(string.digits)
+symbols += list(string.punctuation)
+symbols += [chr(i) for i in range(128, 256)]
+symbols += [chr(i) for i in range(0x0370, 0x03FF+1)]  # Greek
+symbols += [chr(i) for i in range(0x0400, 0x04FF+1)]  # Cyrillic
+symbols += [chr(i) for i in range(0x2190, 0x21FF+1)]  # Arrows
+symbols += [chr(i) for i in range(0x2200, 0x22FF+1)]  # Math
+symbols += [chr(i) for i in range(0x2600, 0x26FF+1)]  # Misc symbols
+symbols += [chr(i) for i in range(0x2700, 0x27BF+1)]  # Dingbats
+
+# remove duplicates, preserve order
+symbols = list(dict.fromkeys(symbols))
+
+print(f"Total unique symbols: {len(symbols)}")
 
 length = 3
 
@@ -26,7 +35,7 @@ def shuffle(changeable):
 
 data = {}
 
-while length < 200:
+while length < 1438:
     print(f"Length {length}:")
     symbols_to_choose_from = symbols.copy()
     original = []
@@ -49,6 +58,10 @@ while length < 200:
 
     length += 1
   
+
+powers_of_two = []
+for i in range(100):
+    powers_of_two.append(2**i)
 
 # Write results to file
 with open("data.txt", "w") as file:
